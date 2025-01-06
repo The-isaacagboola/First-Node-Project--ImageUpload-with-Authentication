@@ -2,7 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const connectDb = require("./db/config");
 const bookRoutes = require("./routes/book-routes.js");
-const Book = require("./models/book.model.js");
+const User = require("./models/user.model.js");
+const authRouter = require("./routes/auth.routes.js");
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -15,10 +16,11 @@ app.use(express.json());
 
 //routes here
 app.use("/api/books", bookRoutes);
+app.use("/api/auth", authRouter);
 
 //home
 app.get("/", async (req, res) => {
-  console.log(await Book.find({}));
+  console.log("Users", await User.find({}));
   res.send("Hi Welcome to my Home Page");
 });
 app.listen(PORT, () => {
