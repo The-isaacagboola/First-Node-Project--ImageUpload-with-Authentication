@@ -1,5 +1,7 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
 //register controller
 const registerUser = async (req, res) => {
   try {
@@ -34,12 +36,11 @@ const registerUser = async (req, res) => {
       res.status(201).json({
         success: true,
         message: "New user created successfully",
-        data: newlyCreatedUser,
       });
     } else
       res
         .status(404)
-        .json({ message: "Unale to register user. Please try again" });
+        .json({ message: "Unable to register user. Please try again" });
 
     console.log("New User Created;", newlyCreatedUser);
   } catch (error) {
@@ -52,14 +53,13 @@ const registerUser = async (req, res) => {
 };
 
 //login controller
-
 const loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    const checkExitingUsername = await User.findOne({ username });
+    const savedUser = await User.findOne({ username });
 
-    if (!checkExitingUsername) {
+    if (!savedUser) {
       return res.status(400).json({
         success: false,
         message: "Username does not exist. Please Register",
@@ -67,21 +67,31 @@ const loginUser = async (req, res) => {
     }
 
     //compare provided password with hashed
-    const compare = await bcrypt.compare(
-      password,
-      checkExitingUsername.password
-    );
+    const compare = await bcrypt.compare(password, savedUser.password);
+
+    if (!compare) {
+      return res.status(400).json({
+        success: false,
+        message: "Wrong Password. Please check and try again",
+      });
+    }
 
     //create user tokens --- json web tokens
-    compare
-      ? res.status(200).json({
-          success: true,
-          message: "User found",
-        })
-      : res.status(400).json({
-          success: false,
-          message: "Wrong Password. Please check and try again",
-        });
+    const acccessToken = jwt.sign(
+      {
+        userId: savedUser._id,
+        username: savedUser.username,
+        role: savedUser.role,
+      },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "15m" }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "User found successfully",
+      acccessToken,
+    });
   } catch (error) {
     console.error("Unable to create User", error);
     res.status(500).json({
@@ -92,3 +102,4 @@ const loginUser = async (req, res) => {
 };
 
 module.exports = { loginUser, registerUser };
+// "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzdkNTA1OWNlYWFiZmVlNmFlYTg2MmMiLCJ1c2VybmFtZSI6Ik9uZVRvU2l4Iiwicm9sZSI6InVzZXIiLCJpYXQiOjE3MzYyNjU5NDEsImV4cCI6MTczNjI2Njg0MX0.Dczigapn4ksEDmLt5zbGiw1Cd1EtjnaRYWTrR033TF8"

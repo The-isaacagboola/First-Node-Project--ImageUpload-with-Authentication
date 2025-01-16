@@ -4,7 +4,8 @@ const connectDb = require("./db/config");
 const bookRoutes = require("./routes/book-routes.js");
 const User = require("./models/user.model.js");
 const authRouter = require("./routes/auth.routes.js");
-
+const homeRouter = require("./routes/home.route.js");
+const adminRoutes = require("./routes/admin.route.js");
 const PORT = process.env.PORT || 3001;
 const app = express();
 
@@ -17,6 +18,8 @@ app.use(express.json());
 //routes here
 app.use("/api/books", bookRoutes);
 app.use("/api/auth", authRouter);
+app.use("/api/home", homeRouter);
+app.use("/api/admin", adminRoutes);
 
 //home
 app.get("/", async (req, res) => {
