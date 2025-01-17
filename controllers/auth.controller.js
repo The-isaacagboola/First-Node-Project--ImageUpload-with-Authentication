@@ -84,7 +84,7 @@ const loginUser = async (req, res) => {
         role: savedUser.role,
       },
       process.env.JWT_SECRET_KEY,
-      { expiresIn: "15m" }
+      { expiresIn: "1hr" }
     );
 
     res.status(200).json({
@@ -102,4 +102,3 @@ const loginUser = async (req, res) => {
 };
 
 module.exports = { loginUser, registerUser };
-// "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzdkNTA1OWNlYWFiZmVlNmFlYTg2MmMiLCJ1c2VybmFtZSI6Ik9uZVRvU2l4Iiwicm9sZSI6InVzZXIiLCJpYXQiOjE3MzYyNjU5NDEsImV4cCI6MTczNjI2Njg0MX0.Dczigapn4ksEDmLt5zbGiw1Cd1EtjnaRYWTrR033TF8"
