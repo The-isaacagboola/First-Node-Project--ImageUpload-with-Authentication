@@ -1,4 +1,7 @@
-const { uploadToCloudinary } = require("../helpers/cloudinary.helper");
+const {
+  uploadToCloudinary,
+  deleteFromCloudinary,
+} = require("../helpers/cloudinary.helper");
 const Image = require("../models/image.model");
 const fs = require("fs");
 
@@ -62,7 +65,37 @@ const fetchAllImages = async (req, res) => {
   }
 };
 
+const deleteImage = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const publicId = req.assetPublicId;
+
+    const deleteImage = await deleteFromCloudinary(publicId);
+
+    if (!deleteImage) {
+      return res.status(400).json({
+        success: false,
+        message: "Error deleting image from Cloud",
+      });
+    }
+
+    await Image.findByIdAndDelete(id);
+
+    return res.status(200).json({
+      success: true,
+      message: "Image deleted successfully",
+    });
+  } catch (error) {
+    console.error("Something went wrong. Please try again:::", error);
+    res.status(500).json({
+      success: false,
+      message: "Error deleting image. Please try again",
+    });
+  }
+};
+
 module.exports = {
   uploadImageController,
   fetchAllImages,
+  deleteImage,
 };
