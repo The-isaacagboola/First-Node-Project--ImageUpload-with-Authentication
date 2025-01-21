@@ -16,7 +16,7 @@ const sameUserAuth = async (req, res, next) => {
     if (targetImage.uploadedBy.toString() !== userId)
       return res.status(401).json({
         success: false,
-        message: "This user is not allowed to delete the selected image",
+        message: "This user is not authorized to delete the selected image",
       });
 
     req.assetPublicId = targetImage.publicId;
@@ -27,4 +27,3 @@ const sameUserAuth = async (req, res, next) => {
 };
 
 module.exports = sameUserAuth;
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzhiYTMzNWFjYjExNmQ4Njc0YzM5ZjIiLCJ1c2VybmFtZSI6Im5ldyBhZG1pbiB1c2VyMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTczNzIwNTcxMSwiZXhwIjoxNzM3MjA5MzExfQ.kVAcgntcz0Qke-ghUWY4l3-Pe0VFzJ-TzHim1G1uTLo

@@ -10,7 +10,6 @@ const imageRouter = require("./routes/image.route.js");
 const PORT = process.env.PORT || 3001;
 
 const cors = require("cors");
-const { default: mongoose } = require("mongoose");
 const app = express();
 
 //connect to Db

@@ -121,7 +121,7 @@ const changePasswordController = async (req, res) => {
     if (!verified) {
       return res.status(400).json({
         success: false,
-        message: "Password is incorrect. Please try again",
+        message: "Old password is incorrect. Please try again",
       });
     }
 

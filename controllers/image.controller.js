@@ -86,7 +86,7 @@ const deleteImage = async (req, res) => {
       message: "Image deleted successfully",
     });
   } catch (error) {
-    console.error("Something went wrong. Please try again:::", error);
+    console.error("Error deleting image. Please try again:::", error);
     res.status(500).json({
       success: false,
       message: "Error deleting image. Please try again",
