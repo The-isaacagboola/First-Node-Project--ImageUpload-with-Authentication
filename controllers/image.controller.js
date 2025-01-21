@@ -47,7 +47,24 @@ const uploadImageController = async (req, res) => {
 
 const fetchAllImages = async (req, res) => {
   try {
-    const allImages = await Image.find({});
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5; //5 data responses at a time
+    const skip = (page - 1) * limit;
+
+    const sortBy = req.query.sortBy || "createdAt";
+    const sortOrder = req.query.sortOrder === "asc" ? 1 : -1;
+    const totalImages = await Image.countDocuments();
+    const totalPages = Math.ceil(totalImages / limit);
+
+    const sortObj = {};
+    sortObj[sortBy] = sortOrder;
+    // { "createdAt" : "asc" } ---- Response
+    sortObj;
+    const allImages = await Image.find({})
+      .sort(sortObj)
+      .skip(skip)
+      .limit(limit);
+
     if (!allImages)
       return res.status(404).json({
         message: "No images found. Please upload a new image",
@@ -55,6 +72,9 @@ const fetchAllImages = async (req, res) => {
 
     res.status(200).json({
       success: true,
+      currentPage: page,
+      totalPages,
+      totalImages,
       data: allImages,
     });
   } catch (error) {
