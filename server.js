@@ -26,10 +26,15 @@ app.use("/api/home", homeRouter);
 app.use("/api/admin", adminRoutes);
 app.use("/api/image", imageRouter);
 
-//home
+//home --get all users
 app.get("/", async (req, res) => {
-  console.log("Users", await User.find({}));
-  res.send("Hi Welcome to my Home Page");
+  try {
+    const users = await User.find({});
+    if (!users) return res.status(404).json({ message: "No users available" });
+    res.status(200).json(users);
+  } catch (error) {
+    console.log("SOmething went wrong, Please try Again", error);
+  }
 });
 app.listen(PORT, () => {
   console.log(`Server is listening on PORT : ${PORT}`);
