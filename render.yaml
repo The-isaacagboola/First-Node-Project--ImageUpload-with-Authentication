@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: Image-Upload-Auth
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    plan: free
