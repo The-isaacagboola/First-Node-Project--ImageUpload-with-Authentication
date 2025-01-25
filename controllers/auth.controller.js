@@ -41,8 +41,6 @@ const registerUser = async (req, res) => {
       res
         .status(404)
         .json({ message: "Unable to register user. Please try again" });
-
-    console.log("New User Created;", newlyCreatedUser);
   } catch (error) {
     console.error("Error registering User", error);
     res.status(500).json({

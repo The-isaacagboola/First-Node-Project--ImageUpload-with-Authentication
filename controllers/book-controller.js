@@ -64,7 +64,6 @@ const AddNewBook = async (req, res) => {
         message: "Book Created Successfully",
         data: newlyCreatedBook,
       });
-      console.log("Book created successfully");
     } else
       res.status(400).json({
         message: "Error creating book",
@@ -112,7 +111,6 @@ const deleteBook = async (req, res) => {
   try {
     const deletedBook = await Book.findByIdAndDelete(id);
     if (!deletedBook) {
-      console.log("Book" + id + " does not exist");
       return res.status(404).json({
         success: false,
         message: "Book" + id + " does not exist",
@@ -125,7 +123,6 @@ const deleteBook = async (req, res) => {
       data: deletedBook,
     });
   } catch (error) {
-    console.log("Error deleting specified book");
     res.status(400).json({
       success: false,
       message: "Error Occured. Unable to delete book",
