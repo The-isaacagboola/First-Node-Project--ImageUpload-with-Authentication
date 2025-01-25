@@ -7,7 +7,7 @@ const router = express.Router();
 // This is to show how to protect certain routes from being accessed by everyone
 router.get("/welcome", authMiddleWare, (req, res) => {
   const { username, userId, role } = req.userInfo;
-  console.log("Infos::: ", username, userId, role);
+
   res.json({
     message: "Welcome to the Home Page",
     user: {
